@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3 uid="uid://m8ttpuv6edj3"]
+
+[ext_resource type="Texture2D" uid="uid://dtdiwscew15xq" path="res://Assets/Hero/Bullet/torpedo_flame.png" id="1_phk0y"]
+[ext_resource type="Script" path="res://Scripts/bullet.gd" id="1_v2cfb"]
+[ext_resource type="Texture2D" uid="uid://pmyp3nn7fx5g" path="res://Assets/Hero/Bullet/torpedo_flame_1.png" id="2_s0oub"]
+[ext_resource type="Texture2D" uid="uid://devrtppqhjuib" path="res://Assets/Hero/Bullet/torpedo_flame_2.png" id="3_0kmpm"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qmgbp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_phk0y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_s0oub")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_0kmpm")
+}],
+"loop": true,
+"name": &"Fire",
+"speed": 15.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qhw8m"]
+radius = 2.0
+height = 16.0
+
+[node name="Bullet" type="CharacterBody2D"]
+script = ExtResource("1_v2cfb")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-4.76837e-07, 0)
+scale = Vector2(0.0740741, 0.0559524)
+sprite_frames = SubResource("SpriteFrames_qmgbp")
+animation = &"Fire"
+frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_qhw8m")
