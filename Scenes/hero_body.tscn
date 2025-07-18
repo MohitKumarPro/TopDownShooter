@@ -1,4 +1,4 @@
-[gd_scene load_steps=109 format=3 uid="uid://biplw4drif2dc"]
+[gd_scene load_steps=111 format=3 uid="uid://biplw4drif2dc"]
 
 [ext_resource type="Script" path="res://Scripts/hero_body.gd" id="1_5kou3"]
 [ext_resource type="Texture2D" uid="uid://capj7who34q52" path="res://Assets/Hero/feet/run/survivor-run_0.png" id="1_rhu1d"]
@@ -105,6 +105,7 @@
 [ext_resource type="Texture2D" uid="uid://ssxo0no3pmyl" path="res://Assets/Hero/handgun/shoot/survivor-shoot_handgun_0.png" id="103_pgu5y"]
 [ext_resource type="Texture2D" uid="uid://4vv0ou1fhiu2" path="res://Assets/Hero/handgun/shoot/survivor-shoot_handgun_1.png" id="104_iy8oa"]
 [ext_resource type="Texture2D" uid="uid://dbtyg32hynrgv" path="res://Assets/Hero/handgun/shoot/survivor-shoot_handgun_2.png" id="105_d4ih4"]
+[ext_resource type="Script" path="res://Scripts/camera_2d.gd" id="106_8lvqn"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_njxkd"]
 animations = [{
@@ -462,6 +463,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_nunkw"]
 radius = 80.0562
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_0o0eq"]
+radius = 84.0952
+
 [node name="HeroBody" type="CharacterBody2D"]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_5kou3")
@@ -482,3 +486,14 @@ shape = SubResource("CircleShape2D_nunkw")
 
 [node name="Marker2DFront" type="Marker2D" parent="."]
 position = Vector2(134, 54)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.5, 0.5)
+script = ExtResource("106_8lvqn")
+
+[node name="HeroArea2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HeroArea2D"]
+shape = SubResource("CircleShape2D_0o0eq")
+
+[connection signal="area_entered" from="HeroArea2D" to="." method="_on_hero_area_2d_area_entered"]

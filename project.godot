@@ -14,6 +14,10 @@ config/name="TopDownShooter"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+AudioController="*res://Scripts/audio_controller.gd"
+
 [input]
 
 MouseButton={

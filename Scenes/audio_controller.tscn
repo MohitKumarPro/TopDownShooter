@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://le17jcdol7g"]
+
+[ext_resource type="Script" path="res://Scripts/audio_controller.gd" id="1_763pj"]
+[ext_resource type="AudioStream" uid="uid://dpeu1ov2sh1sa" path="res://Assets/Music/The Countdown Has Begun (ordinary).wav" id="2_4h551"]
+[ext_resource type="AudioStream" uid="uid://cwh6tm74srkee" path="res://Assets/Music/canon_fire.ogg" id="3_olnt3"]
+[ext_resource type="AudioStream" uid="uid://cwmb3yhjotiio" path="res://Assets/Music/explodemini.wav" id="4_ap5wm"]
+
+[node name="AudioController" type="Node2D"]
+script = ExtResource("1_763pj")
+
+[node name="BackGround" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_4h551")
+
+[node name="HeroGun" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_olnt3")
+
+[node name="RoboGun" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_ap5wm")

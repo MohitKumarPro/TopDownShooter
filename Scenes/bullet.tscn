@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://m8ttpuv6edj3"]
+[gd_scene load_steps=8 format=3 uid="uid://m8ttpuv6edj3"]
 
 [ext_resource type="Texture2D" uid="uid://dtdiwscew15xq" path="res://Assets/Hero/Bullet/torpedo_flame.png" id="1_phk0y"]
 [ext_resource type="Script" path="res://Scripts/bullet.gd" id="1_v2cfb"]
@@ -26,10 +26,15 @@ animations = [{
 radius = 2.0
 height = 16.0
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_31w1b"]
+radius = 2.5
+height = 17.0
+
 [node name="Bullet" type="CharacterBody2D"]
 script = ExtResource("1_v2cfb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
 texture_filter = 1
 position = Vector2(-4.76837e-07, 0)
 scale = Vector2(0.0740741, 0.0559524)
@@ -37,7 +42,19 @@ sprite_frames = SubResource("SpriteFrames_qmgbp")
 animation = &"Fire"
 frame = 1
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2, 0)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_qhw8m")
+
+[node name="BulletArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BulletArea"]
+position = Vector2(2, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_31w1b")
+
+[connection signal="area_entered" from="BulletArea" to="." method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="BulletArea" to="." method="_on_area_2d_body_entered"]
