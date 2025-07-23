@@ -1,8 +1,8 @@
 extends CharacterBody2D
-@onready var Robo = $AnimatedSprite2D
+@onready var officer = $AnimatedSprite2D
 const SPEED = 400.0
 const JUMP_VELOCITY = -400.0
-var life = 50
+var life = 3
 @onready var hero = $"../HeroBody"
 var can_fire = true
 var rotation_speed = 5  # radians per second
@@ -12,26 +12,29 @@ var running := false
 var direction_angel
 var State = "Ideal"
 var aiming = false
-signal Robolife
+signal officerlife
+var i
 @onready var AudioController = $"../HeroBody/AudioController"
 func _ready() -> void:
-	emit_signal("Robolife",life)
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	i = rng.randi_range(0, 1)
+	look_at(hero.global_position)
+	emit_signal("officerlife",life)
 func _physics_process(delta: float) -> void:
-	if hero.global_position.distance_to(Robo.global_position)>=800:
-		var direction = hero.global_position - Robo.global_position
-		direction_angel = (hero.global_position - Robo.global_position).angle()
+	if hero.global_position.distance_to(officer.global_position)>=800 and hero.global_position.distance_to(officer.global_position)<2000 and State != 'death':
+		var direction = hero.global_position - officer.global_position
+		direction_angel = (hero.global_position - officer.global_position).angle()
 		var new_velocity = direction.normalized() * SPEED
 		velocity = new_velocity
 		State = 'Running'
 		start_running()
 	
-	if hero.global_position.distance_to(Robo.global_position)<700 and can_fire:
-		var direction = hero.global_position - Robo.global_position
-		direction_angel = (hero.global_position - Robo.global_position).angle()
-		rotation = lerp_angle(rotation, direction_angel, rotation_speed * delta)
+	if hero.global_position.distance_to(officer.global_position)<800 and can_fire and State != 'death':
+		var direction = hero.global_position - officer.global_position
 		State = 'Shoot'
 		shoot()
-	if running:
+	if running and State != 'death':
 		walk_towards(velocity,direction_angel,delta)
 		timer += delta
 		if timer >= run_for_seconds:
@@ -43,40 +46,45 @@ func start_running():
 	running = true
 
 func walk_towards(velocity,direction_angel,delta):
-	rotation = lerp_angle(rotation, direction_angel, rotation_speed * delta)
+	look_at(hero.global_position)
 	Robowalk()
 	move_and_slide()
 
 func shoot():
 	if State == "Shoot":
 		if aiming:
-			Robo.play("AimGun")
+			officer.play("shoot")
 			await $AnimatedSprite2D.animation_finished
 			aiming = false
 		else:
 			AudioController.RoboGun_play()
-			Robo.play("ShootGun")
+			officer.play("shoot")
 			var bullet_path = preload("res://Scenes/bullet.tscn")
 			var bullet = bullet_path.instantiate()
 			bullet.set_bullet_size(Vector2(1, 1))
 			bullet.speed = 3000
 			bullet.dir = rotation
 			bullet.set_bullet_type("robo")
-			bullet.pos = $Marker2DFrontEnemy.global_position
+			bullet.pos = $Marker2DFrontOfficer.global_position
 			bullet.rota = global_rotation
 			get_parent().add_child(bullet)
 			can_fire = false
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(0.8).timeout
 			can_fire = true
 	
-	
-func _on_enemy_robo_area_area_entered(area: Area2D) -> void:
+func _on_area_2_dofficer_area_entered(area: Area2D) -> void:
 	if area.name == 'BulletArea':
 		life = life - 1
-		emit_signal("Robolife",life)
+		#emit_signal("officerlife",life)
 	if life <= 0:
+		State = 'death'
+		if i==0:
+			officer.play("death")
+		else:
+			officer.play("death2")
+		await get_tree().create_timer(1).timeout
 		queue_free()
 
 func Robowalk():
 	if State == 'Running':
-		Robo.play("Run")
+		officer.play("Run")

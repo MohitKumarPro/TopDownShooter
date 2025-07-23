@@ -3,9 +3,9 @@ extends CharacterBody2D
 @export var move_speed := 200.0
 @onready var body = $HeadGunSprite
 @onready var feet = $FeetSprite
-var life = 10
+var life = 50
 var can_fire = true
-@onready var AudioController = $"../AudioController"
+@onready var AudioController =$"AudioController"
 signal herolife
 
 func _ready() -> void:

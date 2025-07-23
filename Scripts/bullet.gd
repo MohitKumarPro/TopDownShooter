@@ -11,9 +11,11 @@ func _ready() -> void:
 func set_bullet_type(type: String):
 	match type:
 		"hero":
-			$Sprite2D.texture = preload("res://Assets/Laser Sprites/01.png")
+			$Sprite2D.texture = preload("res://Assets/Laser Sprites/04.png")
 		"robo":
 			$Sprite2D.texture = preload("res://Assets/Laser Sprites/02.png")
+		"officer":
+			$Sprite2D.texture = preload("res://Assets/Laser Sprites/03.png")
 
 func set_bullet_size(scale_factor: Vector2):
 	$Sprite2D.scale = scale_factor
