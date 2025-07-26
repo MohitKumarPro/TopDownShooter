@@ -7,11 +7,14 @@ var life = 50
 var can_fire = true
 @onready var AudioController =$"AudioController"
 signal herolife
-
+var death_start = false
 func _ready() -> void:
 	AudioController.back_play()
 	emit_signal("herolife",life)
 func _physics_process(delta: float) -> void:
+	if death_start == true:
+		life = life - 0.05
+		emit_signal("herolife",int(life))
 	handle_movement(delta)
 	look_at_mouse()
 
@@ -92,8 +95,15 @@ func fire():
 
 
 func _on_hero_area_2d_area_entered(area: Area2D) -> void:
+	if area.name=='flamesArea':
+		death_start = true
 	if area.name == 'BulletArea':
 		life = life - 1
 		emit_signal("herolife",life)
 	if life <= 0:
 		queue_free()
+
+
+func _on_hero_area_2d_area_exited(area: Area2D) -> void:
+	if area.name=='flamesArea':
+		death_start = false
