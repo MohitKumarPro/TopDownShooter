@@ -16,6 +16,8 @@ func set_bullet_type(type: String):
 			$Sprite2D.texture = preload("res://Assets/Laser Sprites/02.png")
 		"officer":
 			$Sprite2D.texture = preload("res://Assets/Laser Sprites/03.png")
+		"officer2":
+			$Sprite2D.texture = preload("res://Assets/Laser Sprites/05.png")
 
 func set_bullet_size(scale_factor: Vector2):
 	$Sprite2D.scale = scale_factor

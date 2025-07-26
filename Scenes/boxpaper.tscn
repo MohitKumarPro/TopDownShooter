@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=3 uid="uid://urrf7lbv4k4k"]
+
+[ext_resource type="Script" path="res://Scripts/boxpaper.gd" id="1_nc1ja"]
+[ext_resource type="Texture2D" uid="uid://dkth6nqw8wwjs" path="res://Assets/Objects/box.png" id="2_ldu2m"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yxplp"]
+atlas = ExtResource("2_ldu2m")
+region = Rect2(0, 0, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3xi71"]
+atlas = ExtResource("2_ldu2m")
+region = Rect2(512, 0, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fbq6i"]
+atlas = ExtResource("2_ldu2m")
+region = Rect2(0, 512, 512, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xat21"]
+atlas = ExtResource("2_ldu2m")
+region = Rect2(512, 512, 512, 512)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sgqbf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yxplp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3xi71")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fbq6i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xat21")
+}],
+"loop": false,
+"name": &"Distroy",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_26dsu"]
+size = Vector2(135, 124)
+
+[node name="Boxpaper" type="Node2D"]
+script = ExtResource("1_nc1ja")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_sgqbf")
+animation = &"Distroy"
+
+[node name="BoxArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoxArea"]
+position = Vector2(0.5, 21)
+shape = SubResource("RectangleShape2D_26dsu")
+
+[connection signal="area_entered" from="BoxArea" to="." method="_on_box_area_area_entered"]

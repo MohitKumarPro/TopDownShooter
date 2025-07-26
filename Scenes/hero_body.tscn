@@ -499,3 +499,4 @@ script = ExtResource("106_8lvqn")
 shape = SubResource("CircleShape2D_0o0eq")
 
 [connection signal="area_entered" from="HeroArea2D" to="." method="_on_hero_area_2d_area_entered"]
+[connection signal="area_exited" from="HeroArea2D" to="." method="_on_hero_area_2d_area_exited"]

@@ -24,8 +24,6 @@ func zoom_in_on_fire():
 	set_process(true)
 
 func _process(delta):
-	
-	
 	var mouse_world_pos = get_global_mouse_position()
 	var player_pos = global_position
 	var direction_to_mouse = (mouse_world_pos - player_pos).normalized()
