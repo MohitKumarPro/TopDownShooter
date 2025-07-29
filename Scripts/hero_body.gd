@@ -49,7 +49,7 @@ func HandGunMove():
 		if Input.is_action_just_pressed("MouseButton") and can_fire:
 			HandGunShoot()
 			can_fire = false
-			await get_tree().create_timer(0.2).timeout
+			#await get_tree().create_timer(0.2).timeout
 			can_fire = true
 
 func HandGunIdeal():
