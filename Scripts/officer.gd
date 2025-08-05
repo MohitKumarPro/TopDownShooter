@@ -69,7 +69,7 @@ func shoot():
 			bullet.rota = global_rotation
 			get_parent().add_child(bullet)
 			can_fire = false
-			await get_tree().create_timer(0.8).timeout
+			await get_tree().create_timer(0.3).timeout
 			can_fire = true
 	
 func _on_area_2_dofficer_area_entered(area: Area2D) -> void:
