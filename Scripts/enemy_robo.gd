@@ -1,5 +1,5 @@
 extends CharacterBody2D
-
+var life =50
 @export var hero: NodePath
 @export var move_speed: float = 200.0
 @export var firing_angle_deg: float = 360.0
@@ -15,16 +15,36 @@ var previous_rotation: float = 0.0
 @onready var AudioController = $"../HeroBody/AudioController"
 var can_fire=true
 var shooting = false
+signal Robolife
+var time =0
+var  LIGHT_RED_R = 1.0
+var  DARK_RED_R = 0.3
 
+const LIGHT_RED_G := 0.5
+const DARK_RED_G := 0.0
+
+const LIGHT_RED_B := 0.5
+const DARK_RED_B := 0.0
 func _ready():
 	current_health = max_health
+	$ColorRect.visible = false
+	emit_signal("Robolife",life)
 
 func _physics_process(delta):
+	
 	var hero_node = get_node_or_null(hero)
 	if hero_node == null:
 		return
 	
 	var distance = global_position.distance_to(hero_node.global_position)
+	
+	time += delta * 1.5
+	var t := (sin(time) * 0.5) + 0.5  # Smooth lerp between 0 and 1
+	var r = lerp(DARK_RED_R, LIGHT_RED_R, t)
+	var g = lerp(DARK_RED_G, LIGHT_RED_G, t)
+	var b = lerp(DARK_RED_B, LIGHT_RED_B, t)
+	var new_color = Color(r, g, b, 1.0)
+	
 
 	if current_health <= max_health * 0.75:
 		stop_all_actions()
@@ -67,6 +87,8 @@ func _physics_process(delta):
 				start_shooting()
 	if shooting and can_fire:
 		Robo.play("ShootGun")
+		$ColorRect.visible = true
+		$ColorRect.color = new_color
 		AudioController.RoboGun_play()
 		var bullet_path = preload("res://Scenes/bullet.tscn")
 		var bullet = bullet_path.instantiate()
@@ -90,6 +112,7 @@ func start_shooting():
 
 func stop_shooting():
 	shooting = false
+	$ColorRect.visible = false
 	print("Stop Shooting")
 
 func stop_all_actions():
@@ -103,3 +126,11 @@ func shortest_angle(from: float, to: float) -> float:
 	if diff < 0:
 		diff += TAU
 	return diff - PI
+
+
+func _on_enemy_robo_area_area_entered(area: Area2D) -> void:
+	if area.name == 'BulletArea':
+		life = life - 1
+		emit_signal("Robolife",life)
+	if life <= 0:
+		queue_free()

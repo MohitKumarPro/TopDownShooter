@@ -8,6 +8,7 @@ var can_fire = true
 @onready var AudioController =$"AudioController"
 signal herolife
 var death_start = false
+var weapon = 'HandGun'
 func _ready() -> void:
 	AudioController.back_play()
 	emit_signal("herolife",life)
@@ -15,6 +16,8 @@ func _physics_process(delta: float) -> void:
 	if death_start == true:
 		life = life - 0.05
 		emit_signal("herolife",int(life))
+	if life <=20:
+		weapon = "rifle"
 	handle_movement(delta)
 	look_at_mouse()
 
@@ -35,6 +38,7 @@ func handle_movement(delta: float) -> void:
 	
 	#if Input.is_action_pressed("MouseButton"):
 	#	HandGunShoot()
+	
 	move_and_slide()
 
 
@@ -44,19 +48,19 @@ func look_at_mouse() -> void:
 
 func HandGunMove():
 	if !Input.is_action_pressed("MouseButton"):
-		body.play("HandGunMove")
+		body.play(weapon+"Move")
 	else:
-		if Input.is_action_just_pressed("MouseButton") and can_fire:
+		if Input.is_action_pressed("MouseButton") and can_fire:
 			HandGunShoot()
 			can_fire = false
-			#await get_tree().create_timer(0.2).timeout
+			await get_tree().create_timer(0.1).timeout
 			can_fire = true
 
 func HandGunIdeal():
 	if !Input.is_action_pressed("MouseButton"):
-		body.play("HandGunIdeal")
+		body.play(weapon+"Ideal")
 	else:
-		if Input.is_action_just_pressed("MouseButton") and can_fire:
+		if Input.is_action_pressed("MouseButton") and can_fire:
 			HandGunShoot()
 			can_fire = false
 			await get_tree().create_timer(0.1).timeout
@@ -77,7 +81,7 @@ func FeetRight():
 	feet.play("FeetRight")
 
 func HandGunShoot():
-	body.play("HandGunShoot")
+	body.play(weapon+"Shoot")
 	fire()
 
 func fire():
