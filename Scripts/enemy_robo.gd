@@ -25,10 +25,25 @@ const DARK_RED_G := 0.0
 
 const LIGHT_RED_B := 0.5
 const DARK_RED_B := 0.0
+
+@export var base_direction_deg: float = 0.0        # center direction in degrees (0 = right)
+@export var span_deg: float = 180.0                # total allowed swing (degrees)
+@export var min_step_deg: float = 5.0              # minimum random rotation step
+@export var max_step_deg: float = 60.0             # maximum random rotation step
+@export var allow_direction_change := true         # if true, random steps can be positive or negative
+
+var half_span_deg: float
+var current_rel_deg: float = 0.0  # relative to base_direction_deg, range [-half_span, +half_span]
+var rng := RandomNumberGenerator.new()
+
 func _ready():
+	$EnemyTimer.timeout.connect(_on_timer_timeout)
 	current_health = max_health
 	$ColorRect.visible = false
 	emit_signal("Robolife",life)
+	rng.randomize()
+	half_span_deg = span_deg * 0.5
+	rotation = deg_to_rad(base_direction_deg)  # initialize facing base direction
 
 func _physics_process(delta):
 	
@@ -85,12 +100,17 @@ func _physics_process(delta):
 				state = "shooting"
 				start_rotation = rotation
 				start_shooting()
+		
+		"shootingr":
+			target_and_shoot(hero_node, new_color)
+			
+			
 	if shooting and can_fire:
 		Robo.play("ShootGun")
 		$ColorRect.visible = true
 		$ColorRect.color = new_color
 		AudioController.RoboGun_play()
-		var bullet_path = preload("res://Scenes/bullet.tscn")
+		var bullet_path = preload("res://Scenes/bulletEnemy.tscn")
 		var bullet = bullet_path.instantiate()
 		bullet.set_bullet_size(Vector2(1, 1))
 		bullet.speed = 3000
@@ -107,13 +127,10 @@ func start_shooting():
 	Robo.play("AimGun")
 	await $AnimatedSprite2D.animation_finished
 	shooting = true
-	# Example: emit bullet every frame or use Timer-based system
-	print("Start Shooting")
 
 func stop_shooting():
 	shooting = false
 	$ColorRect.visible = false
-	print("Stop Shooting")
 
 func stop_all_actions():
 	velocity = Vector2.ZERO
@@ -134,3 +151,28 @@ func _on_enemy_robo_area_area_entered(area: Area2D) -> void:
 		emit_signal("Robolife",life)
 	if life <= 0:
 		queue_free()
+
+
+func target_and_shoot(hero,new_color) -> void:
+	look_at(hero.global_position)
+	Robo.play("ShootGun")
+	$ColorRect.visible = true
+	$ColorRect.color = new_color
+	AudioController.RoboGun_play()
+	var bullet_path = preload("res://Scenes/bullet.tscn")
+	var bullet = bullet_path.instantiate()
+	bullet.set_bullet_size(Vector2(1, 1))
+	bullet.speed = 3000
+	bullet.dir = rotation
+	bullet.set_bullet_type("robo")
+	bullet.pos = $Marker2DFrontEnemy.global_position
+	bullet.rota = global_rotation
+	get_parent().add_child(bullet)
+	can_fire = false
+	await get_tree().create_timer(0.1).timeout
+	can_fire = true
+	state =  "moving"
+
+func _on_timer_timeout():
+	state =  "shootingr"
+	

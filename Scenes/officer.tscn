@@ -198,8 +198,7 @@ script = ExtResource("1_bdche")
 texture_filter = 1
 scale = Vector2(3.2, 3.2)
 sprite_frames = SubResource("SpriteFrames_xawq0")
-animation = &"Run"
-frame = 1
+animation = &"death"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_l1oll")

@@ -3,12 +3,12 @@ extends CharacterBody2D
 @export var move_speed := 200.0
 @onready var body = $HeadGunSprite
 @onready var feet = $FeetSprite
-var life = 50
+var life = 500
 var can_fire = true
 @onready var AudioController =$"AudioController"
 signal herolife
 var death_start = false
-var weapon = 'HandGun'
+var weapon = 'rifle'
 func _ready() -> void:
 	AudioController.back_play()
 	emit_signal("herolife",life)
@@ -17,7 +17,7 @@ func _physics_process(delta: float) -> void:
 		life = life - 0.05
 		emit_signal("herolife",int(life))
 	if life <=20:
-		weapon = "rifle"
+		weapon = "HandGun"
 	handle_movement(delta)
 	look_at_mouse()
 
@@ -89,7 +89,7 @@ func fire():
 	$Camera2D.zoom_in_on_fire()
 	var bullet_path = preload("res://Scenes/bullet.tscn")
 	var bullet = bullet_path.instantiate()
-	bullet.set_bullet_size(Vector2(0.5, 0.5))
+	bullet.set_bullet_size(Vector2(1, 1))
 	bullet.speed = 3000
 	bullet.dir = rotation
 	bullet.set_bullet_type("hero")
@@ -101,7 +101,7 @@ func fire():
 func _on_hero_area_2d_area_entered(area: Area2D) -> void:
 	if area.name=='flamesArea':
 		death_start = true
-	if area.name == 'BulletArea':
+	if area.name == 'BulletArea1':
 		life = life - 1
 		emit_signal("herolife",life)
 	if life <= 0:

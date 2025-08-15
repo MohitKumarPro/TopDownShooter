@@ -665,15 +665,13 @@ animation = &"FeetRight"
 
 [node name="HeadGunSprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_mkw6x")
-animation = &"HandGunIdeal"
-frame = 19
-frame_progress = 1.0
+animation = &"rifleShoot"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_nunkw")
 
 [node name="Marker2DFront" type="Marker2D" parent="."]
-position = Vector2(134, 54)
+position = Vector2(160, 48)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.5, 0.5)

@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://jd6vgtv60sic"]
+
+[ext_resource type="Script" path="res://Scripts/door.gd" id="1_tndb5"]
+[ext_resource type="Texture2D" uid="uid://dht67fdhoy7g3" path="res://Assets/Objects/BasicFurniture_0000s_0003s_0000_Side.png" id="2_0mwwq"]
+[ext_resource type="Texture2D" uid="uid://q1iqli1ly7uo" path="res://Assets/Objects/hud_minimap.png" id="3_obcku"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vll1f"]
+size = Vector2(509, 34)
+
+[node name="door" type="Node2D"]
+script = ExtResource("1_tndb5")
+
+[node name="HudMinimap2" type="Sprite2D" parent="."]
+position = Vector2(394, -444)
+rotation = 0.483456
+scale = Vector2(3, 3)
+texture = ExtResource("3_obcku")
+
+[node name="HudMinimap" type="Sprite2D" parent="."]
+position = Vector2(147, -352)
+rotation = -0.322886
+scale = Vector2(3, 3)
+texture = ExtResource("3_obcku")
+
+[node name="BasicFurniture0000s0003s0000Side" type="Sprite2D" parent="."]
+position = Vector2(116, 2)
+texture = ExtResource("2_0mwwq")
+flip_h = true
+
+[node name="BasicFurniture0000s0003s0000Side2" type="Sprite2D" parent="."]
+position = Vector2(373, 2)
+texture = ExtResource("2_0mwwq")
+
+[node name="DoorArea2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorArea2D"]
+position = Vector2(244.5, -1)
+shape = SubResource("RectangleShape2D_vll1f")
+
+[connection signal="area_entered" from="DoorArea2D" to="." method="_on_door_area_2d_area_entered"]
