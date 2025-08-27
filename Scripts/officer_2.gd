@@ -30,7 +30,7 @@ func _physics_process(delta: float) -> void:
 		State = 'Running'
 		start_running()
 	
-	if hero.global_position.distance_to(officer.global_position)<800 and can_fire and State != 'death':
+	if hero.global_position.distance_to(officer.global_position)<500 and can_fire and State != 'death':
 		var direction = hero.global_position - officer.global_position
 		State = 'Shoot'
 		shoot()
@@ -60,10 +60,10 @@ func shoot():
 			await $AnimatedSprite2D.animation_finished
 			aiming = false
 		else:
-			AudioController.RoboGun_play()
+			AudioController.FireGun_play()
 			officer.play("Flame")
 			$AnimatedSprite2Dflames.visible = true
-			$AnimatedSprite2Dflames.play("flames")
+			$AnimatedSprite2Dflames.play("flames_1")
 			$flamesArea/CollisionShape2Dflames.disabled = false
 			#var bullet_path = preload("res://Scenes/bullet.tscn")
 			#var bullet = bullet_path.instantiate()
