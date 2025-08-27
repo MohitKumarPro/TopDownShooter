@@ -5,6 +5,7 @@ extends Node2D
 @onready var door2 = $BasicFurniture0000s0003s0000Side2
 @onready var door3 = $HudMinimap2
 @onready var door4 = $HudMinimap
+@onready var AudioController = $"../HeroBody/AudioController"
 var start = 'donothing'
 var i
 func _ready():
@@ -37,8 +38,10 @@ func _process(delta):
 
 func _on_door_area_2d_area_entered(area: Area2D) -> void:
 	i=i+1
-	if area.name=='BulletArea' and i>50:
+	AudioController.Door_play()
+	if area.name=='BulletArea' and i>5:
 		start = 'broke'
+		
 		await get_tree().create_timer(0.3).timeout
 		start = 'fall'
 		

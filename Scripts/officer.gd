@@ -33,6 +33,7 @@ func _physics_process(delta: float) -> void:
 		start_running()
 	
 	if hero.global_position.distance_to(officer.global_position)<1000 and can_fire and State != 'death':
+		look_at(hero.global_position)
 		var direction = hero.global_position - officer.global_position
 		State = 'Shoot'
 		shoot()
@@ -87,6 +88,7 @@ func _on_area_2_dofficer_area_entered(area: Area2D) -> void:
 			officer.play("death")
 		else:
 			officer.play("death2")
+		AudioController.MaleDeath_play()
 		await get_tree().create_timer(1).timeout
 		
 		#queue_free()
